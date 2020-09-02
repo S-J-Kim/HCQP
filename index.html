@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body onload="init()">
+    <div class="wrap">
+        <div class="content">
+            <div class="main-title title"><span>HongikClassQuickPass</span></div>
+            <div class="current-time">
+                <div class="current-time--title title"><span>현재시각</span></div>
+                <div class="current-time--time">HH:MM</div>
+            </div>
+            <div class="current-class">
+                <div class="current-class--title title"><span>진행중인 수업</span></div>
+                <div class="current-class--class-name">HH:MM</div>
+            </div>
+            <div class="shortcut-icon">
+                <div>
+                    <img src="a1cb4811cb63dc69551c1c1a9cc28d1a.png" alt="">
+                </div>
+                <div style="font-size: 45px; line-height: 100px;"><a class="link" href="#">Webex</a></div>
+                
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="date">yyyy-mm-dd (a)</div>
+            <div class="d-day">hh</div>
+        </div>
+    </div>
+    
+</body>
+
+
+<script>
+
+    class Class{
+        constructor(Name, Url="https://www.youtube.com"){
+            this.className=Name;
+            this.webexUrl=Url;
+        }
+    }
+
+    var eu = new Class("서양사의이해", "https://hongik.webex.com/meet/2byong");
+    var db = new Class("기초데이터베이스", "https://hongik.webex.com/meet/kckim");
+    var am = new Class("오토마타", "https://hongik.webex.com/meet/krchong");
+    var is = new Class("정보검색");
+    var np = new Class("네트워크프로그래밍", "www.gmail.com");
+    var os = new Class("운영체제", "https://hongik.webex.com/meet/sikim");
+    var dc = new Class("수업시간이 아닙니다", "www.youtube.com");
+
+    var timeTable = [
+        [eu, db, eu, dc, dc],
+        [db, db, eu, dc, dc],
+        [dc, dc, dc, dc, dc],
+        [dc, dc, dc, dc, os],
+        [am, am, am, db, os],
+        [is, np, np, os, is],
+        [is, np, dc ,dc ,dc]]
+
+    function classfind(){
+        var date = new Date();
+        var day = date.getDay()-1;
+        var hrs = date.getHours()-10;
+
+        if((day>=0 && day<=4) && (hrs>=0 && hrs <= 6)){
+            document.querySelector('.current-class--class-name').innerText = timeTable[hrs][day].className;
+            document.querySelector('.link').href = timeTable[hrs][day].Url;
+        }
+
+        else{
+            document.querySelector('.current-class--class-name').innerText = "수업시간이 아닙니다";
+            document.querySelector('.link').href = "https://www.youtube.com";
+        }
+    }
+
+    
+
+    Date.prototype.format = function (f) {
+
+    if (!this.valueOf()) return " ";
+
+
+
+    var weekKorName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+
+    var weekKorShortName = ["일", "월", "화", "수", "목", "금", "토"];
+
+    var weekEngName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    var weekEngShortName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    var d = this;
+
+
+
+    return f.replace(/(yyyy|yy|MM|dd|KS|KL|ES|EL|HH|hh|mm|ss|a\/p)/gi, function ($1) {
+
+        switch ($1) {
+
+            case "yyyy": return d.getFullYear(); // 년 (4자리)
+
+            case "yy": return (d.getFullYear() % 1000).zf(2); // 년 (2자리)
+
+            case "MM": return (d.getMonth() + 1).zf(2); // 월 (2자리)
+
+            case "dd": return d.getDate().zf(2); // 일 (2자리)
+
+            case "KS": return weekKorShortName[d.getDay()]; // 요일 (짧은 한글)
+
+            case "KL": return weekKorName[d.getDay()]; // 요일 (긴 한글)
+
+            case "ES": return weekEngShortName[d.getDay()]; // 요일 (짧은 영어)
+
+            case "EL": return weekEngName[d.getDay()]; // 요일 (긴 영어)
+
+            case "HH": return d.getHours().zf(2); // 시간 (24시간 기준, 2자리)
+
+            case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2); // 시간 (12시간 기준, 2자리)
+
+            case "mm": return d.getMinutes().zf(2); // 분 (2자리)
+
+            case "ss": return d.getSeconds().zf(2); // 초 (2자리)
+
+            case "a/p": return d.getHours() < 12 ? "오전" : "오후"; // 오전/오후 구분
+
+            default: return $1;
+
+        }
+
+    });
+
+    };
+
+
+
+    String.prototype.string = function (len) { var s = '', i = 0; while (i++ < len) { s += this; } return s; };
+
+    String.prototype.zf = function (len) { return "0".string(len - this.length) + this; };
+
+    Number.prototype.zf = function (len) { return this.toString().zf(len); };
+
+    time_ = document.querySelector('.current-time--time');
+
+    function getTime(){
+        const date = new Date();
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+        time_.innerText = `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    }
+
+    function getDate(){
+        const date = new Date();
+        const yearmonthdate = date.format('yyyy.MM.dd.(KS)');
+        document.querySelector('.date').innerText = yearmonthdate;
+    }
+
+    function getDday(){
+        const date = new Date();
+        const goal = new Date(2020, 11, 14);
+        
+        var gap = goal.getTime()-date.getTime();
+        var dday = Math.ceil(gap/(60*1000*60*24));
+
+        document.querySelector('.d-day').innerText = "종강까지 " + dday + "일";
+    }
+
+    function init(){
+        getTime();
+        getDate();
+        getDday();
+        classfind();
+        setInterval(getTime, 1000);
+    }
+
+</script>
+</html>
