@@ -13,11 +13,11 @@
         <div class="content" style="margin-bottom:30%">
             <div class="main-title title"><span>HongikClassQuickPass</span></div>
             <div class="current-time">
-                <div class="current-time--title title"><span>현재시각</span></div>
+                <div class="current-time--title title"><span>Current Time</span></div>
                 <div class="current-time--time">HH:MM</div>
             </div>
             <div class="current-class">
-                <div class="current-class--title title"><span>진행중인 수업</span></div>
+                <div class="current-class--title title"><span>Upcoming Class</span></div>
                 <div class="current-class--class-name">HH:MM</div>
             </div>
             <div class="shortcut-icon">
@@ -66,6 +66,7 @@
 
     function classfind(){
         var date = new Date();
+        date.setMinutes(date.getMinutes()-10);
         var day = date.getDay()-1;
         var hrs = date.getHours()-10;
 
